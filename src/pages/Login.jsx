@@ -16,21 +16,27 @@ function Login() {
   //   setPassword(event.target.value);
   // }
 
-  const handleSubmit = async(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/auth', {username, password});
+      const response = await axios.post("http://localhost:8000/auth", {
+        username,
+        password,
+      });
       console.log(response.data);
-      localStorage.setItem('logged', response.data.logged);
-      localStorage.setItem('admin', response.data.data);
-      localStorage.setItem('token', response.data.token);
-      // localStorage.setItem('username', username);
-      history('/')
+      if (response.data.logged) {
+        localStorage.setItem("logged", response.data.logged);
+        localStorage.setItem("admin", JSON.stringify(response.data.data));
+        localStorage.setItem("token", response.data.token);
+        // localStorage.setItem('username', username);
+        history("/");
+      } else {
+        console.log("LOGIN GAGAL");
+      }
+    } catch (error) {
+      console.log(error);
     }
-    catch (error) {
-      console.log(error)
-    }
-  }
+  };
 
   return (
     <section className="bg-white">
