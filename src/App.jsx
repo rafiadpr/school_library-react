@@ -13,6 +13,7 @@ import Admin from "./pages/Admin";
 import AddBook from "./pages/Book/AddBook";
 import EditBook from "./pages/Book/EditBook";
 import AddMember from "./pages/Member/AddMember";
+import EditMember from "./pages/Member/EditMember";
 
 function App() {
   const location = useLocation();
@@ -33,8 +34,10 @@ function App() {
           <Route path="Register" element={<Register />} />
           <Route path="Admin" element={<Admin />} />
           <Route path="Book/AddBook" element={<AddBook />} />
-          <Route path="Book/EditBook" element={<EditBook />} />
+          <Route path="Book/:id_book" element={<EditBook />} />
           <Route path="Member/AddMember" element={<AddMember />} />
+          <Route path="Member/:id_member" element={<EditMember />} />
+
         </Routes>
       </div>
     </>

@@ -16,6 +16,19 @@ function Member() {
   }, []);
   console.log(data);
 
+  const handleDelete = (id) => {
+    console.log(id);
+    axios
+      .delete(`http://localhost:8000/member/${id}`)
+      .then((e) => {
+        console.log(e.data.message);
+        setData("");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <div className="container mx-auto my-6">
@@ -23,6 +36,9 @@ function Member() {
           <table className="min-w-full divide-y-2 divide-gray-200 text-sm">
             <thead>
               <tr>
+                <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
+                  ID
+                </th>
                 <th className="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900">
                   Name
                 </th>
@@ -50,6 +66,9 @@ function Member() {
                 return (
                   <tr>
                     <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                      {item.id}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                       {item.name}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
@@ -67,7 +86,7 @@ function Member() {
                     <td className="whitespace-nowrap px-4 py-2">
                       <div class="inline-flex rounded-lg border border-gray-100 bg-gray-100 p-1">
                         <button class="inline-block rounded-md px-4 py-2 text-sm text-gray-500 hover:text-gray-700 focus:relative">
-                          Edit
+                          <a href={`Member/${item.id}`}>Edit</a> 
                         </button>
 
                         <button class="inline-block rounded-md px-4 py-2 text-sm text-gray-500 hover:text-gray-700 focus:relative">

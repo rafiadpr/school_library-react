@@ -8,14 +8,6 @@ function Login() {
   const [password, setPassword] = useState("");
   const history = useNavigate();
 
-  // function handleUsernameChange(event) {
-  //   setUsername(event.target.value);
-  // }
-
-  // function handlePasswordChange(event) {
-  //   setPassword(event.target.value);
-  // }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -169,20 +161,6 @@ function Login() {
                     company announcements.
                   </span>
                 </label>
-              </div>
-
-              <div className="col-span-6">
-                <p className="text-sm text-gray-500">
-                  By creating an account, you agree to our
-                  <a href="#" className="text-gray-700 underline">
-                    terms and conditions
-                  </a>
-                  and
-                  <a href="#" className="text-gray-700 underline">
-                    privacy policy
-                  </a>
-                  .
-                </p>
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">

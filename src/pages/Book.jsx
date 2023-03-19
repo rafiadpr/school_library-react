@@ -3,28 +3,40 @@ import axios from "axios";
 
 function Book() {
   const [data, setData] = useState([]);
+
   useEffect(() => {
     axios
       .get("http://localhost:8000/book")
       .then((res) => {
-        // console.log(res.data);
         setData(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  console.log(data);
 
-  const handleDelete = (dataID) => {
-    // Delete item from server
+  // const handleDelete = () => {
+  //   axios
+  //     .delete(`/users/${bookID}`)
+  //     .then((response) => {
+  //       console.log(response.data.message);
+  //       setData("");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+
+  const handleDelete = (id) => {
+    console.log(id);
     axios
-      .delete(`http://localhost:8000/book/${dataID}`)
-      .then((response) => {
-        setData(data.filter((data) => data.ID !== dataID));
+      .delete(`http://localhost:8000/book/${id}`)
+      .then((e) => {
+        console.log(e.data.message);
+        setData("");
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -69,7 +81,7 @@ function Book() {
             <tbody className="divide-y divide-gray-200">
               {data.map((item) => {
                 return (
-                  <tr>
+                  <tr key={item.id}>
                     <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                       {item.id}
                     </td>
@@ -95,17 +107,22 @@ function Book() {
                       {item.cover}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2">
-                      <div class="inline-flex rounded-lg border border-gray-100 bg-gray-100 p-1">
-                        <button class="inline-block rounded-md px-4 py-2 text-sm text-gray-500 hover:text-gray-700 focus:relative">
-                          <a href="/Book/EditBook">Edit</a>
+                      <div className="inline-flex rounded-lg border border-gray-100 bg-gray-100 p-1">
+                        <button className="inline-block rounded-md px-4 py-2 text-sm text-gray-500 hover:text-gray-700 focus:relative">
+                          <a href={`Book/${item.id}`}>Edit</a>
                         </button>
 
-                        <button class="inline-block rounded-md px-4 py-2 text-sm text-gray-500 hover:text-gray-700 focus:relative">
-                        <a href="/Book/ViewBook">View</a>
+                        <button className="inline-block rounded-md px-4 py-2 text-sm text-gray-500 hover:text-gray-700 focus:relative">
+                          <a href="/Book/ViewBook">View</a>
                         </button>
 
-                        <button class="inline-block rounded-md bg-white px-4 py-2 text-sm text-blue-500 shadow-sm focus:relative">
-                        <a href="/Book/DeleteBook">Delete</a>
+                        <button
+                          className="inline-block rounded-md bg-white px-4 py-2 text-sm text-blue-500 shadow-sm focus:relative"
+                          onClick={() => {
+                            handleDelete(item.id);
+                          }}
+                        >
+                          Delete
                         </button>
                       </div>
                     </td>
@@ -116,7 +133,7 @@ function Book() {
           </table>
         </div>
         <a
-          class="inline-block rounded border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
+          className="inline-block rounded border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
           href="/Book/AddBook"
         >
           Add Book
