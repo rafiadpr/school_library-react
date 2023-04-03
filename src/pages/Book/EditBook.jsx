@@ -1,48 +1,67 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, useParams } from "react-router-dom";
-import { ReactDOM } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 function EditBook() {
-  const [data, setData] = useState([]);
-  const [updateData, setUpdateData] = useState([]);
-  const [detail, setDetail] = useState([]);
   const { id_book } = useParams();
-  const filteredData = data.filter((item) => item.id === Number(id_book));
+  const [data, setData] = useState({
+    isbn: "",
+    title: "",
+    author: "",
+    publisher: "",
+    category: "",
+    stock: "",
+  });
+  const [cover, setCover] = useState("");
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/book")
+      .get(`http://localhost:8000/book/${id_book}`)
       .then((res) => {
         setData(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id_book]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUpdateData((updateData) => {
-      return {
-        ...data,
-        [name]: value,
-      };
-    });
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    axios
-      .put(`http://localhost:8000/book/${id_book}`, updateData)
-      .then((e) => {
-        console.log(e.data.message);
-      })
+  const handleCoverChange = (e) => {
+    setCover(e.target.files[0]);
+  };
 
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("isbn", data.isbn);
+    formData.append("title", data.title);
+    formData.append("author", data.author);
+    formData.append("publisher", data.publisher);
+    formData.append("category", data.category);
+    formData.append("stock", data.stock);
+    formData.append("cover", cover);
+    try {
+      const res = await axios.put(
+        `http://localhost:8000/book/${id_book}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(res.data.message);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <section className="p-6 dark:bg-gray-800 dark:text-gray-50 h-screen">
@@ -50,110 +69,102 @@ function EditBook() {
         method="POST"
         action=""
         className="container flex flex-col mx-auto space-y-12 ng-untouched ng-pristine ng-valid"
-        onSubmit={(e) => handleSubmit(e)}
+        onSubmit={handleSubmit}
       >
         <fieldset className="grid grid-cols-3 gap-6 p-6 rounded-md shadow-sm dark:bg-gray-900">
-          {filteredData.map((item) => {
-            return ( 
-              <div
-                key={item.id}
-                className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3"
-              >
-                <div className="col-span-full sm:col-span-3">
-                  <label htmlFor="firstname" className="text-sm">
-                    ISBN
-                  </label>
-                  <input
-                    id="isbn"
-                    name="isbn"
-                    type="number"
-                    placeholder={item.isbn}
-                    className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-                <div className="col-span-full sm:col-span-3">
-                  <label htmlFor="lastname" className="text-sm">
-                    Title
-                  </label>
-                  <input
-                    id="lastname"
-                    name="title"
-                    type="text"
-                    placeholder={item.title}
-                    className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-                <div className="col-span-full sm:col-span-3">
-                  <label htmlFor="email" className="text-sm">
-                    Author
-                  </label>
-                  <input
-                    id="email"
-                    name="author"
-                    type="text"
-                    placeholder={item.author}
-                    className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-                <div className="col-span-full sm:col-span-3">
-                  <label htmlFor="address" className="text-sm">
-                    Publisher
-                  </label>
-                  <input
-                    id="address"
-                    name="publisher"
-                    type="text"
-                    placeholder={item.publisher}
-                    className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-                <div className="col-span-full sm:col-span-3">
-                  <label htmlFor="city" className="text-sm">
-                    Category
-                  </label>
-                  <input
-                    id="city"
-                    name="category"
-                    type="text"
-                    placeholder={item.category}
-                    className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-                <div className="col-span-full sm:col-span-3">
-                  <label htmlFor="state" className="text-sm">
-                    Stock
-                  </label>
-                  <input
-                    id="state"
-                    name="stock"
-                    type="number"
-                    placeholder={item.stock}
-                    className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-                <div className="col-span-full">
-                  <label htmlFor="zip" className="text-sm">
-                    Cover
-                  </label>
-                  <input
-                    id="zip"
-                    name="cover"
-                    type="file"
-                    placeholder=""
-                    className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
-                    onChange={(e) => handleChange(e)}
-                  />
-                </div>
-              </div>
-            );
-          })}
-
+          <div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
+            <div className="col-span-full sm:col-span-3">
+              <label htmlFor="isbn" className="text-sm">
+                ISBN
+              </label>
+              <input
+                id="isbn"
+                name="isbn"
+                type="text"
+                value={data.isbn}
+                className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-span-full sm:col-span-3">
+              <label htmlFor="title" className="text-sm">
+                Title
+              </label>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                value={data.title}
+                className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-span-full sm:col-span-3">
+              <label htmlFor="author" className="text-sm">
+                Author
+              </label>
+              <input
+                id="author"
+                name="author"
+                type="text"
+                value={data.author}
+                className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-span-full sm:col-span-3">
+              <label htmlFor="publisher" className="text-sm">
+                Publisher
+              </label>
+              <input
+                id="publisher"
+                name="publisher"
+                type="text"
+                value={data.publisher}
+                className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-span-full sm:col-span-3">
+              <label htmlFor="category" className="text-sm">
+                Category
+              </label>
+              <input
+                id="category"
+                name="category"
+                type="text"
+                value={data.category}
+                className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-span-full sm:col-span-3">
+              <label htmlFor="stock" className="text-sm">
+                Stock
+              </label>
+              <input
+                id="stock"
+                name="stock"
+                type="number"
+                value={data.stock}
+                className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="col-span-full">
+              <label htmlFor="zip" className="text-sm">
+                Cover
+              </label>
+              <input
+                id="zip"
+                name="cover"
+                type="file"
+                placeholder=""
+                className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
+                onChange={handleCoverChange}
+              />
+            </div>
+          </div>
           <button type="submit">Submit</button>
         </fieldset>
       </form>

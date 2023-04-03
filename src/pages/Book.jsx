@@ -3,6 +3,7 @@ import axios from "axios";
 
 function Book() {
   const [data, setData] = useState([]);
+  const url = "http://localhost:8000/cover/";
 
   useEffect(() => {
     axios
@@ -104,20 +105,20 @@ function Book() {
                       {item.stock}
                     </td>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {item.cover}
+                      <img src={url + item.cover} alt={item.cover} />
                     </td>
                     <td className="whitespace-nowrap px-4 py-2">
                       <div className="inline-flex rounded-lg border border-gray-100 bg-gray-100 p-1">
-                        <button className="inline-block rounded-md px-4 py-2 text-sm text-gray-500 hover:text-gray-700 focus:relative">
+                        <button className="inline-block rounded-md px-4 py-2 text-sm text-yellow-500 hover:text-gray-700 focus:relative">
                           <a href={`Book/${item.id}`}>Edit</a>
                         </button>
 
-                        <button className="inline-block rounded-md px-4 py-2 text-sm text-gray-500 hover:text-gray-700 focus:relative">
+                        <button className="inline-block rounded-md px-4 py-2 text-sm text-blue-500 hover:text-gray-700 focus:relative">
                           <a href="/Book/ViewBook">View</a>
                         </button>
 
                         <button
-                          className="inline-block rounded-md bg-white px-4 py-2 text-sm text-blue-500 shadow-sm focus:relative"
+                          className="inline-block rounded-md bg-white px-4 py-2 text-sm text-red-500 shadow-sm focus:relative"
                           onClick={() => {
                             handleDelete(item.id);
                           }}
