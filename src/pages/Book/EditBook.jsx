@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function EditBook() {
   const { id_book } = useParams();
@@ -13,6 +14,7 @@ function EditBook() {
     stock: "",
   });
   const [cover, setCover] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -58,6 +60,7 @@ function EditBook() {
         }
       );
       console.log(res.data.message);
+      navigate(-1);
     } catch (err) {
       console.log(err);
     }

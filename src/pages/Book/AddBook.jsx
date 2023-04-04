@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AddBook() {
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
+  const [photo, setPhoto] = useState(null);
+
   useEffect(() => {
     axios
       .get("http://localhost:8000/book")
@@ -23,14 +27,42 @@ function AddBook() {
     setData({ ...data, [name]: value });
   }
 
+  function handleFileChange(e) {
+    setPhoto(e.target.files[0]);
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     axios
       .post("http://localhost:8000/book", data)
       .then((e) => {
         console.log(e.data.message);
+        navigate(-1);
       })
 
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("isbn", data.isbn);
+    formData.append("title", data.title);
+    formData.append("title", data.title);
+    formData.append("author", data.author);
+    formData.append("publisher", data.publisher);
+    formData.append("category", data.category);
+    formData.append("stock", data.stock);
+    formData.append("photo", photo);
+
+    axios
+      .post("http://localhost:8000/book", formData)
+      .then((res) => {
+        console.log(res.data.message);
+        navigate(-1);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -134,7 +166,7 @@ function AddBook() {
                 type="file"
                 placeholder=""
                 className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
-                onChange={(e) => handleChange(e)}
+                onChange={(e) => handleFileChange(e)}
               />
             </div>
             <button type="submit">Submit</button>

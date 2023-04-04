@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function EditMember() {
   const { id_member } = useParams();
@@ -11,6 +12,7 @@ function EditMember() {
     address: "",
   });
   const [photo, setPhoto] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -57,6 +59,7 @@ function EditMember() {
         }
       );
       console.log(res.data.message);
+      navigate(-1);
     } catch (err) {
       console.log(err);
     }

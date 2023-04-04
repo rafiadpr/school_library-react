@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AddMember() {
   const [data, setData] = useState([]);
+  const navigate = useNavigate();
+  const [photo, setPhoto] = useState(null);
+
   useEffect(() => {
     axios
       .get("http://localhost:8000/member")
@@ -23,14 +27,25 @@ function AddMember() {
     setData({ ...data, [name]: value });
   }
 
+  function handleFileChange(e) {
+    setPhoto(e.target.files[0]);
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/member", data)
-      .then((e) => {
-        console.log(e.data.message);
-      })
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("gender", data.gender);
+    formData.append("contact", data.contact);
+    formData.append("address", data.address);
+    formData.append("photo", photo);
 
+    axios
+      .post("http://localhost:8000/member", formData)
+      .then((res) => {
+        console.log(res.data.message);
+        navigate(-1);
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -108,7 +123,7 @@ function AddMember() {
                 type="file"
                 placeholder=""
                 className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
-                onChange={(e) => handleChange(e)}
+                onChange={(e) => handleFileChange(e)}
               />
             </div>
             <button type="submit" className="flex justify-center px-8 py-3 font-semibold rounded-full dark:bg-gray-100 dark:text-gray-800">Submit</button>

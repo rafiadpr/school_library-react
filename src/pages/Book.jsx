@@ -16,18 +16,6 @@ function Book() {
       });
   }, []);
 
-  // const handleDelete = () => {
-  //   axios
-  //     .delete(`/users/${bookID}`)
-  //     .then((response) => {
-  //       console.log(response.data.message);
-  //       setData("");
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-
   const handleDelete = (id) => {
     console.log(id);
     axios
