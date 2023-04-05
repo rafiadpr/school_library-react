@@ -22,8 +22,10 @@ function Login() {
         localStorage.setItem("token", response.data.token);
         // localStorage.setItem('username', username);
         history("/");
+        // alert("Login Berhasil")
       } else {
         console.log("LOGIN GAGAL");
+        alert("Login Gagal")
       }
     } catch (error) {
       console.log(error);
@@ -168,13 +170,13 @@ function Login() {
                   className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
                   type="submit"
                 >
-                  Create an account
+                  Login
                 </button>
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                  Already have an account?
+                  Don't have an account?
                   <a href="/" className="text-gray-700 underline">
-                    Log in
+                    Register
                   </a>
                 </p>
               </div>

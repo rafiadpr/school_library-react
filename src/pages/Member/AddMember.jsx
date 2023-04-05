@@ -126,7 +126,12 @@ function AddMember() {
                 onChange={(e) => handleFileChange(e)}
               />
             </div>
-            <button type="submit" className="flex justify-center px-8 py-3 font-semibold rounded-full dark:bg-gray-100 dark:text-gray-800">Submit</button>
+            <button
+              type="submit"
+              className="flex justify-center px-8 py-3 font-semibold rounded-full dark:bg-gray-100 dark:text-gray-800"
+            >
+              Submit
+            </button>
           </div>
         </fieldset>
       </form>

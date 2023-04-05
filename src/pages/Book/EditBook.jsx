@@ -13,7 +13,7 @@ function EditBook() {
     category: "",
     stock: "",
   });
-  const [cover, setCover] = useState("");
+  const [cover, setCover] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +37,7 @@ function EditBook() {
 
   const handleCoverChange = (e) => {
     setCover(e.target.files[0]);
+    console.log(cover);
   };
 
   const handleSubmit = async (e) => {
@@ -59,8 +60,11 @@ function EditBook() {
           },
         }
       );
-      console.log(res.data.message);
-      navigate(-1);
+      if (res.data.success) {
+        navigate("../Book");
+      }
+      alert(res.data.message);
+      setCover(null);
     } catch (err) {
       console.log(err);
     }

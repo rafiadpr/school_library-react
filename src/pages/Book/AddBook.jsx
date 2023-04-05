@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 function AddBook() {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
-  const [photo, setPhoto] = useState(null);
+  const [cover, setCover] = useState(null);
 
   useEffect(() => {
     axios
@@ -28,21 +28,7 @@ function AddBook() {
   }
 
   function handleFileChange(e) {
-    setPhoto(e.target.files[0]);
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    axios
-      .post("http://localhost:8000/book", data)
-      .then((e) => {
-        console.log(e.data.message);
-        navigate(-1);
-      })
-
-      .catch((err) => {
-        console.log(err);
-      });
+    setCover(e.target.files[0]);
   }
 
   function handleSubmit(e) {
@@ -50,12 +36,11 @@ function AddBook() {
     const formData = new FormData();
     formData.append("isbn", data.isbn);
     formData.append("title", data.title);
-    formData.append("title", data.title);
     formData.append("author", data.author);
     formData.append("publisher", data.publisher);
     formData.append("category", data.category);
     formData.append("stock", data.stock);
-    formData.append("photo", photo);
+    formData.append("cover", cover);
 
     axios
       .post("http://localhost:8000/book", formData)
@@ -79,7 +64,7 @@ function AddBook() {
         <fieldset className="grid grid-cols-3 gap-6 p-6 rounded-md shadow-sm dark:bg-gray-900">
           <div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
             <div className="col-span-full sm:col-span-3">
-              <label htmlFor="firstname" className="text-sm">
+              <label htmlFor="name" className="text-sm">
                 ISBN
               </label>
               <input
@@ -92,11 +77,11 @@ function AddBook() {
               />
             </div>
             <div className="col-span-full sm:col-span-3">
-              <label htmlFor="lastname" className="text-sm">
+              <label htmlFor="title" className="text-sm">
                 Title
               </label>
               <input
-                id="lastname"
+                id="title"
                 name="title"
                 type="text"
                 placeholder="Title"
@@ -105,11 +90,11 @@ function AddBook() {
               />
             </div>
             <div className="col-span-full sm:col-span-3">
-              <label htmlFor="email" className="text-sm">
+              <label htmlFor="author" className="text-sm">
                 Author
               </label>
               <input
-                id="email"
+                id="author"
                 name="author"
                 type="text"
                 placeholder="Author"
@@ -118,11 +103,11 @@ function AddBook() {
               />
             </div>
             <div className="col-span-full sm:col-span-3">
-              <label htmlFor="address" className="text-sm">
+              <label htmlFor="publisher" className="text-sm">
                 Publisher
               </label>
               <input
-                id="address"
+                id="publisher"
                 name="publisher"
                 type="text"
                 placeholder="Publisher"
@@ -131,11 +116,11 @@ function AddBook() {
               />
             </div>
             <div className="col-span-full sm:col-span-3">
-              <label htmlFor="city" className="text-sm">
+              <label htmlFor="category" className="text-sm">
                 Category
               </label>
               <input
-                id="city"
+                id="category"
                 name="category"
                 type="text"
                 placeholder="Category"
@@ -144,24 +129,24 @@ function AddBook() {
               />
             </div>
             <div className="col-span-full sm:col-span-3">
-              <label htmlFor="state" className="text-sm">
+              <label htmlFor="stock" className="text-sm">
                 Stock
               </label>
               <input
-                id="state"
+                id="stock"
                 name="stock"
-                type="number"
+                type="text"
                 placeholder="Stock"
                 className="w-full rounded-md focus:ring focus:ring-opacity-75 focus:ring-violet-400 dark:border-gray-700 dark:text-gray-900"
                 onChange={(e) => handleChange(e)}
               />
             </div>
             <div className="col-span-full">
-              <label htmlFor="zip" className="text-sm">
+              <label htmlFor="cover" className="text-sm">
                 Cover
               </label>
               <input
-                id="zip"
+                id="cover"
                 name="cover"
                 type="file"
                 placeholder=""
@@ -169,7 +154,7 @@ function AddBook() {
                 onChange={(e) => handleFileChange(e)}
               />
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit" className="flex justify-center px-8 py-3 font-semibold rounded-full dark:bg-gray-100 dark:text-gray-800">Submit</button>
           </div>
         </fieldset>
       </form>

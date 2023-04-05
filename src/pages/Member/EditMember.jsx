@@ -11,7 +11,7 @@ function EditMember() {
     contact: "",
     address: "",
   });
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +47,12 @@ function EditMember() {
     formData.append("address", data.address);
     formData.append("photo", photo);
 
-    console.log(formData);
+    // const fileSize = photo && photo.size ? photo.size / (1024 * 1024) : 0;
+
+    // if (fileSize > 5) {
+    //   console.log("File too large, maximum size is 5MB");
+    //   return;
+    // } else {
     try {
       const res = await axios.put(
         `http://localhost:8000/member/${id_member}`,
@@ -58,11 +63,15 @@ function EditMember() {
           },
         }
       );
-      console.log(res.data.message);
-      navigate(-1);
+      if (res.data.success) {
+        navigate("../Member");
+      }
+      alert(res.data.message);
+      setPhoto(null);
     } catch (err) {
       console.log(err);
     }
+    // }
   };
 
   return (
